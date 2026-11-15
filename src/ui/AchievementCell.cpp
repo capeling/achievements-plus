@@ -1,6 +1,5 @@
 #include "AchievementCell.hpp"
 
-#include <cue/PlayerIcon.hpp>
 #include <cue/Util.hpp>
 
 using namespace geode::prelude;
@@ -70,17 +69,21 @@ bool AchievementCell::init(std::shared_ptr<Achievement> achievement, cocos2d::CC
     auto title = Label::create(achievement->title, "goldFont.fnt");
     title->setAnchorPoint({0.f, 0.5f});
     title->setLimitLabelWidth(LABEL_WIDTH, 0.6f, 0.f);
+    title->setAlignment(Label::Alignment::Left);
     menu->addChild(title);
     
     auto desc = Label::create(unlocked ? achievement->achievedDescription : achievement->unachievedDescription, "chatFont.fnt");
     desc->setAnchorPoint({0.f, 0.5f});
     // desc->setLimitLabelWidth(LABEL_WIDTH - 5.f, 0.6f, 0.f);
     desc->setScale(0.6f);
+    desc->setAlignment(Label::Alignment::Left);
     desc->setMaxWidth(300.f);
     menu->addChild(desc);
 
     menu->updateLayout();
     this->addChildAtPosition(menu, Anchor::Left, {50.f, 1.f});
+
+    desc->setPositionX(desc->getPositionX() + 0.5f);
 
     if (percent == 0)
         return true;

@@ -30,12 +30,16 @@ protected:
     void createCategoryButtons();
     void createFilterButtons();
 
+    bool matchSearch(std::shared_ptr<Achievement> ach, geode::ZStringView query);
+
     cue::ListNode* m_achievementList = nullptr;
     geode::Label* m_countLabel = nullptr;
+    cocos2d::CCNode* m_searchMenu = nullptr;
     cocos2d::CCMenu* m_categoryMenu = nullptr;
     cocos2d::CCMenu* m_filterMenu = nullptr;
     AchievementCategory m_currentCategory = AchievementCategory::MainLevels;
     FilterType m_filterType = FilterType::None;
+    std::string m_searchQuery = "";
 };
 
 }
