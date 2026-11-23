@@ -10,7 +10,7 @@ struct Achievement {
         int id = 0;
     };
 
-    static std::shared_ptr<Achievement> fromCCDict(cocos2d::CCDictionary* dict);
+    static Achievement fromCCDict(cocos2d::CCDictionary* dict);
 
     std::string identifier = "";
     std::string title = "";

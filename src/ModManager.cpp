@@ -33,7 +33,7 @@ std::string getAchievementCategoryName(AchievementCategory category) {
     return "Unknown";
 }
 
-std::span<std::shared_ptr<Achievement>> ModManager::getAchievementsInCategory(AchievementCategory category) {
+std::span<Achievement> ModManager::getAchievementsInCategory(AchievementCategory category) {
     auto& vec = m_achievementCategories[(int)category];
         if (!vec.empty())
             return vec;
@@ -122,8 +122,8 @@ void ModManager::checkAllAchievements() {
         auto identifier = static_cast<CCString*>(achDict->objectForKey("identifier"))->getCString();
         for (int i = (int)AchievementCategory::None + 1; i < (int)AchievementCategory::Last; i++) {
             auto span = getAchievementsInCategory((AchievementCategory)i);
-            auto it = std::ranges::find_if(span, [identifier](const ModManager::AchievementPtr& ach) {
-                return std::string(identifier) == ach->identifier;
+            auto it = std::ranges::find_if(span, [identifier](const Achievement& ach) {
+                return std::string(identifier) == ach.identifier;
             });
             if (it != span.end()) {
                 found = true;
@@ -163,7 +163,7 @@ void ModManager::writeAchievementsToFile(asp::fs::Path path) {
 
     for (auto& ach : allAchievementDicts) {
         auto acha = Achievement::fromCCDict(static_cast<CCDictionary*>(ach));
-        auto str = fmt::format("\"{}\": \"{}\", \"{}\"\n", acha->identifier, acha->title, acha->unachievedDescription);
+        auto str = fmt::format("\"{}\": \"{}\", \"{}\"\n", acha.identifier, acha.title, acha.unachievedDescription);
         auto a = fuw.write(str);
     }
 

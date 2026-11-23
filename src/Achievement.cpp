@@ -40,14 +40,14 @@ Achievement::Reward Achievement::Reward::fromString(geode::ZStringView string) {
     return ret;
 } 
 
-std::shared_ptr<Achievement> Achievement::fromCCDict(cocos2d::CCDictionary* dict) {
-    auto ret = std::make_shared<Achievement>();
+Achievement Achievement::fromCCDict(cocos2d::CCDictionary* dict) {
+    Achievement ret;
 
-    ret->identifier = static_cast<CCString*>(dict->objectForKey("identifier"))->getCString();
-    ret->title = static_cast<CCString*>(dict->objectForKey("title"))->getCString();
-    ret->reward = Achievement::Reward::fromString(static_cast<CCString*>(dict->objectForKey("icon"))->getCString());
-    ret->unachievedDescription = static_cast<CCString*>(dict->objectForKey("unachievedDescription"))->getCString();
-    ret->achievedDescription = static_cast<CCString*>(dict->objectForKey("achievedDescription"))->getCString();
+    ret.identifier = static_cast<CCString*>(dict->objectForKey("identifier"))->getCString();
+    ret.title = static_cast<CCString*>(dict->objectForKey("title"))->getCString();
+    ret.reward = Achievement::Reward::fromString(static_cast<CCString*>(dict->objectForKey("icon"))->getCString());
+    ret.unachievedDescription = static_cast<CCString*>(dict->objectForKey("unachievedDescription"))->getCString();
+    ret.achievedDescription = static_cast<CCString*>(dict->objectForKey("achievedDescription"))->getCString();
 
     return ret;
 }

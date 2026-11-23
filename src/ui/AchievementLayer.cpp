@@ -115,17 +115,17 @@ void AchievementLayer::loadCategory(AchievementCategory category) {
     auto am = AchievementManager::sharedState();
 
     auto achsSpan = mm.getAchievementsInCategory(category);
-    auto achs = std::vector<ModManager::AchievementPtr>(achsSpan.begin(), achsSpan.end());
+    auto achs = std::vector<Achievement>(achsSpan.begin(), achsSpan.end());
 
     switch (m_filterType) {
         using enum FilterType;
         case None:
             break;
         case Progress:
-            std::sort(achs.begin(), achs.end(), [](const ModManager::AchievementPtr& a, const ModManager::AchievementPtr& b) {
+            std::sort(achs.begin(), achs.end(), [](const Achievement& a, const Achievement& b) {
                 auto am = AchievementManager::sharedState();
-                auto ap = am->percentForAchievement(a->identifier.c_str());
-                auto bp = am->percentForAchievement(b->identifier.c_str());
+                auto ap = am->percentForAchievement(a.identifier.c_str());
+                auto bp = am->percentForAchievement(b.identifier.c_str());
 
                 return ap > bp;
             });
@@ -133,7 +133,7 @@ void AchievementLayer::loadCategory(AchievementCategory category) {
         case Uncompleted:
             for (auto it = achs.begin(); it != achs.end(); ) {
                 auto obj = *it;
-                if (am->isAchievementEarned(obj->identifier.c_str())) {
+                if (am->isAchievementEarned(obj.identifier.c_str())) {
                     it = achs.erase(it);
                     continue;
                 }
@@ -143,7 +143,7 @@ void AchievementLayer::loadCategory(AchievementCategory category) {
         case Completed:
             for (auto it = achs.begin(); it != achs.end(); ) {
                 auto obj = *it;
-                if (!am->isAchievementEarned(obj->identifier.c_str())) {
+                if (!am->isAchievementEarned(obj.identifier.c_str())) {
                     it = achs.erase(it);
                     continue;
                 }
@@ -239,18 +239,18 @@ void AchievementLayer::createFilterButtons() {
     m_searchMenu->addChildAtPosition(m_filterMenu, Anchor::Center, {-10.f, 0.f});
 }
 
-bool AchievementLayer::matchSearch(std::shared_ptr<Achievement> ach, geode::ZStringView query) {
+bool AchievementLayer::matchSearch(const Achievement& ach, geode::ZStringView query) {
     bool addToList = false;
     double weighted = 0;
 
-    addToList |= weightedFuzzyMatch(ach->identifier, query, 0.5, weighted);
-    addToList |= weightedFuzzyMatch(ach->title, query, 1, weighted);
+    addToList |= weightedFuzzyMatch(ach.identifier, query, 0.5, weighted);
+    addToList |= weightedFuzzyMatch(ach.title, query, 1, weighted);
     
     if (weighted < 60.0 + 10.0 * query.size()) {
         addToList = false;
     }
-    addToList |= weightedFuzzyMatch(ach->unachievedDescription, query, 0.5, weighted);
-    addToList |= weightedFuzzyMatch(ach->achievedDescription, query, 0.5, weighted);
+    addToList |= weightedFuzzyMatch(ach.unachievedDescription, query, 0.5, weighted);
+    addToList |= weightedFuzzyMatch(ach.achievedDescription, query, 0.5, weighted);
 
     return addToList;
 }

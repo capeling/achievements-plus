@@ -6,7 +6,7 @@ using namespace geode::prelude;
 
 namespace ap {
 
-AchievementCell* AchievementCell::create(std::shared_ptr<Achievement> achievement, cocos2d::CCSize size) {
+AchievementCell* AchievementCell::create(const Achievement& achievement, cocos2d::CCSize size) {
     auto ret = new AchievementCell();
     if (ret->init(achievement, size)) {
         ret->autorelease();
@@ -16,21 +16,21 @@ AchievementCell* AchievementCell::create(std::shared_ptr<Achievement> achievemen
     return nullptr;
 }
 
-bool AchievementCell::init(std::shared_ptr<Achievement> achievement, cocos2d::CCSize size) {
+bool AchievementCell::init(const Achievement& achievement, cocos2d::CCSize size) {
     if (!CCNode::init()) {
         return false;
     }
 
     auto am = AchievementManager::sharedState();
-    bool unlocked = am->isAchievementEarned(achievement->identifier.c_str());
-    int percent = am->percentForAchievement(achievement->identifier.c_str()); 
+    bool unlocked = am->isAchievementEarned(achievement.identifier.c_str());
+    int percent = am->percentForAchievement(achievement.identifier.c_str()); 
 
     this->setContentSize(size);
 
     bool achImage = false;
 
-    auto rewardType = achievement->reward.type;
-    auto rewardId = achievement->reward.id;
+    auto rewardType = achievement.reward.type;
+    auto rewardId = achievement.reward.id;
     CCSprite* item;
     if (rewardId == 0) {
         item = CCSprite::createWithSpriteFrameName("GJ_achImage_001.png");
@@ -42,7 +42,7 @@ bool AchievementCell::init(std::shared_ptr<Achievement> achievement, cocos2d::CC
     cue::rescaleToMatch(item, size.height * 0.45f);
     
     if (!achImage && !unlocked) {
-        static_cast<GJItemIcon*>(item)->changeToLockedState(1.f / GJItemIcon::scaleForType(achievement->reward.type));
+        static_cast<GJItemIcon*>(item)->changeToLockedState(1.f / GJItemIcon::scaleForType(achievement.reward.type));
     }
 
     if (rewardId != 0) {
@@ -66,13 +66,13 @@ bool AchievementCell::init(std::shared_ptr<Achievement> achievement, cocos2d::CC
 
     constexpr float LABEL_WIDTH = 180.f;
 
-    auto title = Label::create(achievement->title, "goldFont.fnt");
+    auto title = Label::create(achievement.title, "goldFont.fnt");
     title->setAnchorPoint({0.f, 0.5f});
     title->setLimitLabelWidth(LABEL_WIDTH, 0.6f, 0.f);
     title->setAlignment(Label::Alignment::Left);
     menu->addChild(title);
     
-    auto desc = Label::create(unlocked ? achievement->achievedDescription : achievement->unachievedDescription, "chatFont.fnt");
+    auto desc = Label::create(unlocked ? achievement.achievedDescription : achievement.unachievedDescription, "chatFont.fnt");
     desc->setAnchorPoint({0.f, 0.5f});
     // desc->setLimitLabelWidth(LABEL_WIDTH - 5.f, 0.6f, 0.f);
     desc->setScale(0.6f);

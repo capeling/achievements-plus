@@ -30,7 +30,7 @@ protected:
     void createCategoryButtons();
     void createFilterButtons();
 
-    bool matchSearch(std::shared_ptr<Achievement> ach, geode::ZStringView query);
+    bool matchSearch(const Achievement& ach, geode::ZStringView query);
 
     cue::ListNode* m_achievementList = nullptr;
     geode::Label* m_countLabel = nullptr;

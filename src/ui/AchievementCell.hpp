@@ -8,12 +8,12 @@ namespace ap {
 
 class AchievementCell : public cocos2d::CCNode {
 public:
-    static AchievementCell* create(std::shared_ptr<Achievement> achievement, cocos2d::CCSize size);
+    static AchievementCell* create(const Achievement& achievement, cocos2d::CCSize size);
 
     void setBGColor(cocos2d::ccColor3B color);
 
 protected:
-    bool init(std::shared_ptr<Achievement> achievement, cocos2d::CCSize size);
+    bool init(const Achievement& achievement, cocos2d::CCSize size);
 };
 
 }
